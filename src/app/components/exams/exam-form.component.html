@@ -1,0 +1,83 @@
+<div class="card bg-light mb-3">
+    <div class="card-header">{{title}}</div>
+    <div class="card-body">
+        <button class="btn btn-secondary my-2" routerLink="/exams">Go Back</button>
+        
+        <form>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" id="name"
+                [(ngModel)]="e.name">
+                <div class="alert alert-danger" *ngIf="error?.name">
+                    {{error.name}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="subjectParent">Subject</label>
+                <select (change)="listChildSubjects()"
+                [compareWith]="compareSubject" 
+                [(ngModel)]="e.subjectParent" class="form-control"
+                name="subjectParent" id="subjectParent">
+                    <option [ngValue]="undefined">---Select one Subject---</option>
+                    <option *ngFor="let subject of subjectParent" [ngValue]="subject">{{subject.name}}</option>
+                </select>
+
+                <div class="alert alert-danger" *ngIf="error?.subjectParent">
+                    {{error.subjectParent}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="subjectChild">Sub-Subject</label>
+                <select [compareWith]="compareSubject" 
+                [(ngModel)]="e.subjectChild" class="form-control"
+                name="subjectChild" id="subjectChild">
+                    <option [ngValue]="undefined">---Select one Sub-Subject---</option>
+                    <option *ngFor="let subject of subjectChild" [ngValue]="subject">{{subject.name}}</option>
+                </select>
+
+                <div class="alert alert-danger" *ngIf="error?.subjectChild">
+                    {{error.subjectChild}}
+                </div>
+            </div>
+
+            <button (click)="addQuestion()" class="btn btn-secondary btn-lg my-3">
+                Add Question
+            </button>
+
+            <div class="form-group" *ngFor="let question of e.questions; let i = index">    
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Question {{i+1}}:</label>    
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" value="{{question.text}}"
+                        class="form-control"
+                        (change)="addText(question, $event)">
+                    </div>
+                    
+                    <div class="col-sm-1">
+                        <button class="btn btn-danger btn-sm"
+                        (click)="deleteQuestion(question)">
+                            x
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="errorQuestion">
+                {{errorQuestion}}
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" 
+                (click)="e.id? edit(): create()">
+                    {{e.id? 'Edit':'Create'}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

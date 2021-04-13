@@ -1,0 +1,46 @@
+<div class="card bg-light mb-3">
+    <div class="card-header">{{title}}</div>
+    <div class="card-body">
+        <button class="btn btn-primary my-2" routerLink="/exams/form">Create</button>
+        <div class="alert alert-info" *ngIf="list?.length==0">
+            There are no exams in the system.
+        </div>
+        <table class="table table-hover table-striped" *ngIf="list?.length>0">
+            <thead>
+                <tr>
+                   <th>Id</th>
+                   <th>Name</th>
+                   <th>Subject</th>
+                   <th>Questions</th>
+                   <th>Created on</th>
+                   <th>Edit</th>
+                   <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of list">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name | uppercase}}</td>
+                    <td>{{item.subjectChild?.parent.name}} -> {{item.subjectChild?.name}}</td>
+                    <td>{{item.questions.length}}</td>
+                    <td>{{item.createAt | date}}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" 
+                        [routerLink]="['/exams/form',item.id]">
+                        Edit
+                        </button>
+                    </td>
+                    <td><button class="btn btn-danger btn-sm"
+                        (click)="delete(item)">Delete</button></td>
+            </tbody>
+        </table>
+        <mat-paginator [length]="totalStudents"
+              [pageSize]="totalPerPage"
+              [pageIndex]="currentPage"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="paging($event)"
+              showFirstLastButtons
+              class="float-left mx-2">
+        </mat-paginator>
+    </div>
+  </div>

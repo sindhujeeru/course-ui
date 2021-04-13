@@ -1,0 +1,112 @@
+
+<mat-card>
+    <mat-card-header *ngIf="course">
+        <mat-card-title>
+            Students of the {{course.name}}
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+        <mat-tab-group dynamicHeight [(selectedIndex)]="tabIndex">
+            <mat-tab label="Add Students">
+
+                <mat-form-field class="mx-3" style="width: 50%;">
+                    <input matInput placeholder="Search students" 
+                    (keyup)="search($event)">
+                </mat-form-field>
+
+                <table mat-table [dataSource]="addStudent" 
+                class="mat-elevation-z8 mx-3" style="width: 75%;">
+
+                    <ng-container matColumnDef="select" >
+                        
+                        <th mat-header-cell *matHeaderCellDef> 
+                            <mat-checkbox
+                            (change)="$event? selectAll(): null"
+                            [checked]="select.hasValue() && ifAllSelected()"
+                            [indeterminate]="select.hasValue() && !ifAllSelected()">
+                                
+                            </mat-checkbox>
+                        </th>
+                        
+                        <td mat-cell *matCellDef="let student">
+                            <mat-checkbox
+                            (click)="$event.stopPropagation()"
+                            (change)="$event? select.toggle(student):null"
+                            [checked]="select.isSelected(student)">
+                                
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let student"> {{student.name}} </td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                    <td mat-cell *matCellDef="let student"> {{student.lastName}} </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let student; columns: displayedColumns;"
+                    (click)="select.toggle(student)"></tr>
+                </table>
+
+                <button mat-raised-button color="primary" class="m-4" (click)="add()" [disabled]="!select.hasValue()">
+                    Add Students
+                </button>
+            </mat-tab>
+
+            <mat-tab label="Students"> 
+                <table mat-table [dataSource]="datasource" 
+                class="mat-elevation-z8 mx-3" style="width: 75%;">
+
+                    <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> Id </th>
+                    <td mat-cell *matCellDef="let student"> {{student.id}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let student"> {{student.name}} </td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                    <td mat-cell *matCellDef="let student"> {{student.lastName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email</th>
+                    <td mat-cell *matCellDef="let student"> {{student.email}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let student">
+                        <button mat-mini-fab color="warn" 
+                        (click)="removeStudent(student)">
+                            x
+                        </button>
+                    </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsStudents"></tr>
+                    <tr mat-row *matRowDef="let student; columns: displayedColumnsStudents;"></tr>
+                    
+                </table>
+
+                <mat-paginator 
+                    [pageSizeOptions]="pageSizeOptions"
+                    showFirstLastButtons
+                    class="float-left mx-2">
+                </mat-paginator>
+            
+            </mat-tab>
+        
+        </mat-tab-group> 
+    </mat-card-content>
+</mat-card>
